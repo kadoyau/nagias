@@ -23,15 +23,15 @@ driver.get('https://www.nanaco-net.jp/pc/emServlet')
 driver.implicitly_wait(5)
 
 # nanacoのサイトにログインする
-email = driver.find_element_by_css_selector('#loginByPassword input[type=text]')
-password = driver.find_element_by_css_selector('#loginByPassword input[type=password]')
+EMAIL = driver.find_element_by_css_selector('#loginByPassword input[type=text]')
+PASSWORD = driver.find_element_by_css_selector('#loginByPassword input[type=password]')
 with open('.secret') as f:
     credentials = f.read().strip().split('\t')
 
-email.send_keys(credentials[0])
-password.send_keys(credentials[1])
+EMAIL.send_keys(credentials[0])
+PASSWORD.send_keys(credentials[1])
 # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
-password.send_keys(Keys.RETURN)
+PASSWORD.send_keys(Keys.RETURN)
 
 # ギフト登録約款ページに飛ぶ
 driver.get_screenshot_as_file('yakkan.png')
