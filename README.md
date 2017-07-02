@@ -12,3 +12,4 @@ abcdefghijklmnop
 bcdefghijklmnopq
 ...
 ```
+3. 'python nanaco_auto_fill.py`
