@@ -13,8 +13,8 @@ driver = webdriver.Chrome(chrome_options=options)
 # nanacoのログインページへアクセス
 driver.get('https://www.nanaco-net.jp/pc/emServlet')
 
-# wait up to 10 seconds for the elements to become available
-driver.implicitly_wait(10)
+# 次の行動にうつるまでの秒数を指定する
+driver.implicitly_wait(5)
 
 # nanacoのサイトにログインする
 email = driver.find_element_by_css_selector('#loginByPassword input[type=text]')
