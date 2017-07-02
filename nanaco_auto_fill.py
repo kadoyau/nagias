@@ -54,7 +54,7 @@ driver.switch_to.window(gift_page_handle)
 with open('.giftcodes') as f:
     code = f.read().strip()
 split_length = 4
-splited_code = [code[i: i+split_length] for i in range(0, len(code), split_length)]
+splited_code = [code[i: i + split_length] for i in range(0, len(code), split_length)]
 # コードを入力する
 driver.find_element_by_id('gift01').send_keys(splited_code[0])
 driver.find_element_by_id('gift02').send_keys(splited_code[1])
