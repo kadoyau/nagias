@@ -1,6 +1,11 @@
+"""
+nanacoギフトカードの登録をするプログラム
+"""
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
+
+# TODO: usageを書く
 
 # Chrome起動時のオプションの設定
 options = webdriver.ChromeOptions()
