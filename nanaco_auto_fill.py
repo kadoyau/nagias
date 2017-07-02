@@ -36,41 +36,44 @@ PASSWORD.send_keys(Keys.RETURN)
 # ギフト登録約款ページに飛ぶ
 driver.find_element_by_css_selector('#memberNavi02').click()
 
-# ギフト登録ページにジャンプする
-driver.find_element_by_css_selector('#register input[type=image]').click()
 
-# ギフト登録ページのウィンドウに制御を移す
-# @see http://qiita.com/QUANON/items/285ad7157619b0da5c67
-main_page =  driver.window_handles[0]
-
-# 別ウィンドウのハンドラを取得する
-WebDriverWait(driver, 3).until(lambda d: len(d.window_handles) > 1)
-gift_page_handle =  driver.window_handles[1]
-driver.switch_to.window(gift_page_handle)
-
-# コードを取得する
+# コードの数だけ入力を繰り返す
+# コードを全て取得する
 with open('.giftcodes') as f:
-    code = f.read().strip()
-split_length = 4
-splited_code = [code[i: i + split_length] for i in range(0, len(code), split_length)]
-# コードを入力する
-driver.find_element_by_id('gift01').send_keys(splited_code[0])
-driver.find_element_by_id('gift02').send_keys(splited_code[1])
-driver.find_element_by_id('gift03').send_keys(splited_code[2])
-driver.find_element_by_id('gift04').send_keys(splited_code[3])
+    codes = f.read().splitlines()
 
-driver.find_element_by_id('submit-button').click()
+for code in codes:
+    # ギフト登録ページにジャンプする
+    driver.find_element_by_css_selector('#register input[type=image]').click()
 
-# 登録するボタンを押す
-driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
+    # ギフト登録ページのウィンドウに制御を移す
+    # @see http://qiita.com/QUANON/items/285ad7157619b0da5c67
+    main_page =  driver.window_handles[0]
 
-# 当該ウィンドウを終了する
-# @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
-driver.close()
+    # 別ウィンドウのハンドラを取得する
+    WebDriverWait(driver, 3).until(lambda d: len(d.window_handles) > 1)
+    gift_page_handle =  driver.window_handles[1]
+    driver.switch_to.window(gift_page_handle)
 
-driver.switch_to.window(main_page)
+    SPLIT_LENGTH = 4
+    splited_code = [code[i: i + SPLIT_LENGTH] for i in range(0, len(code), SPLIT_LENGTH)]
+    # コードを入力する
+    driver.find_element_by_id('gift01').send_keys(splited_code[0])
+    driver.find_element_by_id('gift02').send_keys(splited_code[1])
+    driver.find_element_by_id('gift03').send_keys(splited_code[2])
+    driver.find_element_by_id('gift04').send_keys(splited_code[3])
 
-# ループ
-driver.find_element_by_css_selector('#register input[type=image]').click()
+    driver.find_element_by_id('submit-button').click()
 
-driver.get_screenshot_as_file('main-page.png')
+    # 登録するボタンを押す
+    driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
+
+    # 当該ウィンドウを終了する
+    # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
+    driver.close()
+
+    # はじめのウィンドウに戻る
+    driver.switch_to.window(main_page)
+    driver.get_screenshot_as_file('main-page.png')
+
+driver.quit()
