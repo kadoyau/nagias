@@ -66,4 +66,13 @@ driver.find_element_by_id('submit-button').click()
 # 登録するボタンを押す
 driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
 
+# 当該ウィンドウを終了する
+# @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
+driver.close()
+
+driver.switch_to.window(main_page)
+
+# ループ
+driver.find_element_by_css_selector('#register input[type=image]').click()
+
 driver.get_screenshot_as_file('main-page.png')
