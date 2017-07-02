@@ -61,4 +61,9 @@ driver.find_element_by_id('gift02').send_keys(splited_code[1])
 driver.find_element_by_id('gift03').send_keys(splited_code[2])
 driver.find_element_by_id('gift04').send_keys(splited_code[3])
 
+driver.find_element_by_id('submit-button').click()
+
+# 登録するボタンを押す
+driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
+
 driver.get_screenshot_as_file('main-page.png')
