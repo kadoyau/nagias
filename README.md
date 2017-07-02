@@ -6,7 +6,7 @@
 ```
 YOUR_LOGIN_ID  YOUR_PASSWORD
 ```
-2. `.giftcodes`に8桁のギフトコードを入力する
+2. `.giftcodes`に12桁のギフトコードを入力する
 ```
 abcdefghijklmnop
 bcdefghijklmnopq
