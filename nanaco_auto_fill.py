@@ -34,11 +34,9 @@ PASSWORD.send_keys(credentials[1])
 PASSWORD.send_keys(Keys.RETURN)
 
 # ギフト登録約款ページに飛ぶ
-driver.get_screenshot_as_file('yakkan.png')
 driver.find_element_by_css_selector('#memberNavi02').click()
 
 # ギフト登録ページにジャンプする
-driver.get_screenshot_as_file('touroku.png')
 driver.find_element_by_css_selector('#register input[type=image]').click()
 
 # ギフト登録ページのウィンドウに制御を移す
