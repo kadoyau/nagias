@@ -12,7 +12,7 @@ options = webdriver.ChromeOptions()
 #options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 # 自分の環境だとCanaryでないと動かなかった
 options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
-options.add_argument('headless')
+# options.add_argument('headless')
 options.add_argument('window-size=1200x600')
 driver = webdriver.Chrome(chrome_options=options)
 
