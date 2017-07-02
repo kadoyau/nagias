@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
- 
+from selenium.webdriver.support.ui import WebDriverWait
+
 # Chrome起動時のオプションの設定
 options = webdriver.ChromeOptions()
 #options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
@@ -26,3 +27,8 @@ email.send_keys(credentials[0])
 password.send_keys(credentials[1])
 # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
 password.send_keys(Keys.RETURN)
+
+# ギフト登録約款ページに飛ぶ
+driver.get_screenshot_as_file('yakkan.png')
+driver.find_element_by_css_selector('#memberNavi02').click()
+
