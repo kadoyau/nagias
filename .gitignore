@@ -1,0 +1,4 @@
+env/
+.secret
+.giftcodes
+*.png
