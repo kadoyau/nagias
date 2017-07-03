@@ -19,9 +19,9 @@ var inline_src = (<><![CDATA[
 
       // コードの取得
       var codeArray = [];
-      // 1行目は結合されているのでイカれている
-      // 2行目以下はループ
+      // 2行目は、券種が結合されているためにセルが1つズレている
       codeArray.push(giftTable[0].rows[1].cells[1].textContent);
+      // 3行目以下はループ
       for (var i = 2; i < giftTable[0].rows.length; i++) {
         codeArray.push(giftTable[0].rows[i].cells[0].textContent);
       }
