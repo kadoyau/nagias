@@ -39,13 +39,14 @@ vim .giftcodes
 python nanaco_auto_fill.py
 ```
 
-## .secretの中身
+## 設定ファイルの作り方
+### .secretの中身
 タブ区切りでID/Passをかきます
 ```
 YOUR_LOGIN_ID  YOUR_PASSWORD
 ```
 
-## .giftcodesの中身
+### .giftcodesの中身
 ```
 abcdefghijklmnop
 bcdefghijklmnopq
@@ -55,6 +56,6 @@ bcdefghijklmnopq
 # `.giftcodes`を作成しやすくする補助ツール
 
 ## 使い方
-- [Tampermonkey](http://tampermonkey.net/)をインストールする
-- https://github.com/kadoyau/nagias/raw/master/code_extractor.user.js をひらいてユーザスクリプトをインストールする
-- ギフトコードが送られてくるページへアクセスするとコピペ用のテキストエリアにコードが出現している
+1. [Tampermonkey](http://tampermonkey.net/)をインストールする
+2. https://github.com/kadoyau/nagias/raw/master/code_extractor.user.js をひらいてユーザスクリプトをインストールする
+3. ギフトコードが送られてくるページへアクセスするとコピペ用のテキストエリアにコードが出現
