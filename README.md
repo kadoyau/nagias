@@ -54,6 +54,7 @@ bcdefghijklmnopq
 ```
 
 # `.giftcodes`を作成しやすくする補助ツール
+![image](https://i.gyazo.com/a77e64e6781ef77aabc673cfc37e7997.png)
 
 ## 使い方
 1. [Tampermonkey](http://tampermonkey.net/)をインストールする
