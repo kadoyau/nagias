@@ -51,3 +51,10 @@ abcdefghijklmnop
 bcdefghijklmnopq
 ...
 ```
+
+# `.giftcodes`を作成しやすくする補助ツール
+
+## 使い方
+- [Tampermonkey](http://tampermonkey.net/)をインストールする
+- https://github.com/kadoyau/nagias/raw/master/code_extractor.user.js をひらいてユーザスクリプトをインストールする
+- ギフトコードが送られてくるページへアクセスするとコピペ用のテキストエリアにコードが出現している
