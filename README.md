@@ -31,7 +31,7 @@ Only local connections are allowed.
 
 # IDとpasswordの設定を記述
 vim .secret
-# 16桁のギフトコードを入力する
+# ギフトコードを入力する
 vim .giftcodes 
 ```
 ## 実行
@@ -47,6 +47,7 @@ YOUR_LOGIN_ID  YOUR_PASSWORD
 ```
 
 ### .giftcodesの中身
+16桁のギフトコードを入力する。1つのコードごとに改行する。
 ```
 abcdefghijklmnop
 bcdefghijklmnopq
@@ -60,3 +61,4 @@ bcdefghijklmnopq
 1. [Tampermonkey](http://tampermonkey.net/)をインストールする
 2. https://github.com/kadoyau/nagias/raw/master/code_extractor.user.js をひらいてユーザスクリプトをインストールする
 3. ギフトコードが送られてくるページへアクセスするとコピペ用のテキストエリアにコードが出現
+4. `.giftcodes`にペーストする
