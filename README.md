@@ -5,6 +5,9 @@
 - [Chrome Canary](https://www.google.co.jp/chrome/browser/canary.html)をインストールする
 - 以下の手順に従ってselenium等を導入
 ```
+git clone git@github.com:kadoyau/nagias.git
+cd nagias
+
 # virtualenvのインストール
 pip install virtualenv
 # virtualenvをアクティベート（ここで/env/binが生成される）
@@ -25,17 +28,14 @@ chromedriver
 Starting ChromeDriver 2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262) on port 9515
 Only local connections are allowed.
 # Ctrl-Cなどで一旦切断する
-```
 
-## 実行
-```
-git clone git@github.com:kadoyau/nagias.git
-cd nagias
 # IDとpasswordの設定を記述
 vim .secret
 # 16桁のギフトコードを入力する
 vim .giftcodes 
-# 実行
+```
+## 実行
+```
 python nanaco_auto_fill.py
 ```
 
