@@ -2,7 +2,8 @@
 
 # 使い方(macOS）
 ## 事前準備
-- [Chrome Canary](https://www.google.co.jp/chrome/browser/canary.html)をインストールする
+- [Chrome Canary](https://www.google.co.jp/chrome/browser/canary.html)をインストールする  
+  - `/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary` におく
 - 以下の手順に従ってselenium等を導入
 ```
 git clone git@github.com:kadoyau/nagias.git
