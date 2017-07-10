@@ -36,8 +36,17 @@ vim .secret
 vim .giftcodes 
 ```
 ## 実行
+
+### モバイル会員・ネット会員
+
 ```
 python nanaco_auto_fill.py
+```
+
+### カード会員
+
+```
+python nanaco_auto_fill_card.py
 ```
 
 ## 設定ファイルの作り方
