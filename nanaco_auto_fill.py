@@ -82,7 +82,6 @@ def main():
 
         # はじめのウィンドウに戻る
         DRIVER.switch_to.window(main_page)
-        DRIVER.get_screenshot_as_file('main-page.png')
 
     DRIVER.quit()
     return results
