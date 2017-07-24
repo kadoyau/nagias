@@ -1,9 +1,11 @@
 """
 nanacoギフトカードの登録をするプログラム
 """
+from pprint import pprint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import NoSuchElementException
 
 # TODO: usageを書く
 
@@ -42,6 +44,7 @@ driver.find_element_by_css_selector('#memberNavi02').click()
 with open('.giftcodes') as f:
     codes = f.read().splitlines()
 
+results = {'success':[], 'fairule':[]}
 for code in codes:
     # ギフト登録ページにジャンプする
     driver.find_element_by_css_selector('#register input[type=image]').click()
@@ -66,7 +69,11 @@ for code in codes:
     driver.find_element_by_id('submit-button').click()
 
     # 登録するボタンを押す
-    driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
+    try:
+        driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
+        results["success"].append(code)
+    except NoSuchElementException:
+        results["fairule"].append(code)
 
     # 当該ウィンドウを終了する
     # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
@@ -77,3 +84,7 @@ for code in codes:
     driver.get_screenshot_as_file('main-page.png')
 
 driver.quit()
+
+print('SUCCESS: ' + str(len(results["success"])))
+print('FAIRULE: ' + str(len(results["fairule"])))
+pprint(results["fairule"])
