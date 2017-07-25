@@ -35,16 +35,9 @@ class NanacoAutoFiller:
         self.__driver.find_element_by_id('gift02').send_keys(SPLITED_CODES[1])
         self.__driver.find_element_by_id('gift03').send_keys(SPLITED_CODES[2])
         self.__driver.find_element_by_id('gift04').send_keys(SPLITED_CODES[3])
-
-    def main(self):
-        # TODO: usageを書く
-        # タイムアウトまでのデフォルト秒数を指定する
-        self.__driver.implicitly_wait(3)
-
-        # nanacoのログインページへアクセス
-        self.__driver.get('https://www.nanaco-net.jp/pc/emServlet')
-
-        # nanacoのサイトにログインする
+    
+    def __login(self):
+        '''nanacoのサイトにログインする'''
         EMAIL = self.__driver.find_element_by_css_selector('#loginByPassword input[type=text]')
         PASSWORD = self.__driver.find_element_by_css_selector('#loginByPassword input[type=password]')
         with open('.secret') as f:
@@ -55,6 +48,15 @@ class NanacoAutoFiller:
         # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
         PASSWORD.send_keys(Keys.RETURN)
 
+
+    def main(self):
+        # TODO: usageを書く
+        # タイムアウトまでのデフォルト秒数を指定する
+        self.__driver.implicitly_wait(3)
+
+        # nanacoのログインページへアクセス
+        self.__driver.get('https://www.nanaco-net.jp/pc/emServlet')
+        self.__login()
         # ギフト登録約款ページに飛ぶ
         self.__driver.find_element_by_css_selector('#memberNavi02').click()
 
