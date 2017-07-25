@@ -13,10 +13,10 @@ class NanacoAutoFiller:
 
     def __init__(self, use_canary = False):
         self.__use_canary = use_canary
-        self.__driver = self.__set_driver()
+        self.__driver = self.__init_driver()
     
-    def __set_driver(self):
-        '''Chrome起動時のオプションの設定'''
+    def __init_driver(self):
+        '''Chrome起動時のオプションの設定をしてドライバを返す'''
         options = webdriver.ChromeOptions()
         if self.__use_canary:
             options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
