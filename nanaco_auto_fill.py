@@ -13,10 +13,9 @@ class NanacoAutoFiller:
 
     def __init__(self, use_canary = False):
         self.__use_canary = use_canary
-
-    def main(self):
-        # TODO: usageを書く
-        # Chrome起動時のオプションの設定
+    
+    def __set_driver(self):
+        '''Chrome起動時のオプションの設定'''
         options = webdriver.ChromeOptions()
         if self.__use_canary:
             options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
@@ -24,7 +23,11 @@ class NanacoAutoFiller:
             options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
         # options.add_argument('headless')
         options.add_argument('window-size=1200x600')
-        DRIVER = webdriver.Chrome(chrome_options=options)
+        return webdriver.Chrome(chrome_options=options)
+
+    def main(self):
+        # TODO: usageを書く
+        DRIVER = self.__set_driver()
 
         # nanacoのログインページへアクセス
         DRIVER.get('https://www.nanaco-net.jp/pc/emServlet')
