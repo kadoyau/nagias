@@ -8,6 +8,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 
 class NanacoAutoFiller:
+    results = {'success':[], 'fairule':[]}
+
+
     def main(self):
         # TODO: usageを書く
         # Chrome起動時のオプションの設定
@@ -45,7 +48,6 @@ class NanacoAutoFiller:
         with open('.giftcodes') as f:
             CODES = f.read().splitlines()
 
-        results = {'success':[], 'fairule':[]}
         for code in CODES:
             # ギフト登録ページにジャンプする
             DRIVER.find_element_by_css_selector('#register input[type=image]').click()
@@ -72,9 +74,9 @@ class NanacoAutoFiller:
             # 登録するボタンを押す
             try:
                 DRIVER.find_element_by_css_selector('#nav2Next input[type=image]').click()
-                results["success"].append(code)
+                self.results["success"].append(code)
             except NoSuchElementException:
-                results["fairule"].append(code)
+                self.results["fairule"].append(code)
 
             # 当該ウィンドウを終了する
             # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
@@ -84,16 +86,14 @@ class NanacoAutoFiller:
             DRIVER.switch_to.window(main_page)
 
         DRIVER.quit()
-        return results
 
-
-    def show_results(self, results):
+    def output(self):
         """結果を表示する"""
-        print('SUCCESS: ' + str(len(results["success"])))
-        print('FAIRULE: ' + str(len(results["fairule"])))
-        pprint(results["fairule"])
+        print('SUCCESS: ' + str(len(self.results["success"])))
+        print('FAIRULE: ' + str(len(self.results["fairule"])))
+        pprint(self.results["fairule"])
 
 if __name__ == '__main__':
     nanaco = NanacoAutoFiller()
-    RESULTS = nanaco.main()
-    nanaco.show_results(RESULTS)
+    nanaco.main()
+    nanaco.output()
