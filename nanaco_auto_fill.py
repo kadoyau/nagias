@@ -49,7 +49,14 @@ class NanacoAutoFiller:
         PASSWORD.send_keys(CREDENTIALS[1])
         # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
         PASSWORD.send_keys(Keys.RETURN)
-
+    
+    def __register(self, code):
+        '''登録するボタンを押す'''
+        try:
+            self.__driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
+            self.__results["success"].append(code)
+        except NoSuchElementException:
+            self.__results["fairule"].append(code)
 
     def main(self):
         # TODO: usageを書く
@@ -67,7 +74,6 @@ class NanacoAutoFiller:
         for code in CODES:
             # ギフト登録ページにジャンプする
             self.__driver.find_element_by_css_selector('#register input[type=image]').click()
-
             # ギフト登録ページのウィンドウに制御を移す
             # @see http://qiita.com/QUANON/items/285ad7157619b0da5c67
             main_page =  self.__driver.window_handles[0]
@@ -78,16 +84,9 @@ class NanacoAutoFiller:
             self.__driver.switch_to.window(gift_page_handle)
 
             self.__input_codes(code)
-
             self.__driver.find_element_by_id('submit-button').click()
 
-            # 登録するボタンを押す
-            try:
-                self.__driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
-                self.__results["success"].append(code)
-            except NoSuchElementException:
-                self.__results["fairule"].append(code)
-
+            self.__register(code)
             # 当該ウィンドウを終了する
             # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
             self.__driver.close()
