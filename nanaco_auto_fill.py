@@ -1,6 +1,7 @@
 """
 nanacoギフトカードの登録をするプログラム
 """
+import sys
 from pprint import pprint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -10,14 +11,17 @@ from selenium.common.exceptions import NoSuchElementException
 class NanacoAutoFiller:
     results = {'success':[], 'fairule':[]}
 
+    def __init__(self, use_canary = False):
+        self.__use_canary = use_canary
 
     def main(self):
         # TODO: usageを書く
         # Chrome起動時のオプションの設定
         options = webdriver.ChromeOptions()
-        #options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-        # 自分の環境だとCanaryでないと動かなかった
-        options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
+        if self.__use_canary:
+            options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
+        else:
+            options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
         # options.add_argument('headless')
         options.add_argument('window-size=1200x600')
         DRIVER = webdriver.Chrome(chrome_options=options)
@@ -94,6 +98,10 @@ class NanacoAutoFiller:
         pprint(self.results["fairule"])
 
 if __name__ == '__main__':
-    nanaco = NanacoAutoFiller()
+    arg_names = ['command', 'use_canary']
+    args = dict(zip(arg_names, sys.argv))
+    use_canary = args.get('use_canary', False)
+
+    nanaco = NanacoAutoFiller(use_canary)
     nanaco.main()
     nanaco.output()
