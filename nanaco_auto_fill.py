@@ -14,6 +14,8 @@ class NanacoAutoFiller:
     def __init__(self, use_canary = False):
         self.__use_canary = use_canary
         self.__driver = self.__init_driver()
+        # タイムアウトまでのデフォルト秒数を指定する
+        self.__driver.implicitly_wait(3)
     
     def __init_driver(self):
         '''Chrome起動時のオプションの設定をしてドライバを返す'''
@@ -51,9 +53,6 @@ class NanacoAutoFiller:
 
     def main(self):
         # TODO: usageを書く
-        # タイムアウトまでのデフォルト秒数を指定する
-        self.__driver.implicitly_wait(3)
-
         # nanacoのログインページへアクセス
         self.__driver.get('https://www.nanaco-net.jp/pc/emServlet')
         self.__login()
@@ -95,7 +94,6 @@ class NanacoAutoFiller:
 
             # はじめのウィンドウに戻る
             self.__driver.switch_to.window(main_page)
-
         self.__driver.quit()
 
     def output(self):
