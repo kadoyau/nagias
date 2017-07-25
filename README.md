@@ -31,9 +31,9 @@ Only local connections are allowed.
 # Ctrl-Cなどで一旦切断する
 
 # IDとpasswordの設定を記述
-vim .secret
+$EDITOR .secret
 # ギフトコードを入力する
-vim .giftcodes 
+$EDITOR .giftcodes 
 ```
 ## 実行
 
