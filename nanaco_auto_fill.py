@@ -50,13 +50,13 @@ class NanacoAutoFiller:
         # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
         PASSWORD.send_keys(Keys.RETURN)
     
-    def __register(self, code):
+    def __register(self):
         '''登録するボタンを押す'''
         try:
             self.__driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
-            self.__results["success"].append(code)
+            return True
         except NoSuchElementException:
-            self.__results["fairule"].append(code)
+            return False
 
     def main(self):
         # TODO: usageを書く
@@ -86,7 +86,10 @@ class NanacoAutoFiller:
             self.__input_codes(code)
             self.__driver.find_element_by_id('submit-button').click()
 
-            self.__register(code)
+            if self.__register():
+                self.__results["success"].append(code)
+            else:
+                self.__results["fairule"].append(code)
             # 当該ウィンドウを終了する
             # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
             self.__driver.close()
