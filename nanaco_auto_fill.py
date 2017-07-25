@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 
 class NanacoAutoFiller:
-    results = {'success':[], 'fairule':[]}
+    __results = {'success':[], 'fairule':[]}
 
     def __init__(self, use_canary = False):
         self.__use_canary = use_canary
@@ -78,9 +78,9 @@ class NanacoAutoFiller:
             # 登録するボタンを押す
             try:
                 DRIVER.find_element_by_css_selector('#nav2Next input[type=image]').click()
-                self.results["success"].append(code)
+                self.__results["success"].append(code)
             except NoSuchElementException:
-                self.results["fairule"].append(code)
+                self.__results["fairule"].append(code)
 
             # 当該ウィンドウを終了する
             # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
@@ -93,9 +93,9 @@ class NanacoAutoFiller:
 
     def output(self):
         """結果を表示する"""
-        print('SUCCESS: ' + str(len(self.results["success"])))
-        print('FAIRULE: ' + str(len(self.results["fairule"])))
-        pprint(self.results["fairule"])
+        print('SUCCESS: ' + str(len(self.__results["success"])))
+        print('FAIRULE: ' + str(len(self.__results["fairule"])))
+        pprint(self.__results["fairule"])
 
 if __name__ == '__main__':
     arg_names = ['command', 'use_canary']
