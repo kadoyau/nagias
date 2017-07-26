@@ -74,6 +74,9 @@ class NanacoAutoFiller:
         '''ギフト登録約款ページへアクセス'''
         self.__driver.find_element_by_css_selector('#memberNavi02').click()
 
+    def __go_to_register_page(self):
+        '''ギフトコード入力ページへアクセス'''
+        self.__driver.find_element_by_css_selector('#register input[type=image]').click()
 
     def main(self):
         # TODO: usageを書く
@@ -82,9 +85,8 @@ class NanacoAutoFiller:
         self.__go_to_agreement_page()
 
         for code in self.__codes:
+            self.__go_to_register_page()
 
-            # ギフト登録ページにジャンプする
-            self.__driver.find_element_by_css_selector('#register input[type=image]').click()
             # ギフト登録ページのウィンドウに制御を移す
             # @see http://qiita.com/QUANON/items/285ad7157619b0da5c67
             main_page =  self.__driver.window_handles[0]
