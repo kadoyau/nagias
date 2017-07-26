@@ -48,6 +48,8 @@ class NanacoAutoFiller:
         EMAIL.send_keys(CREDENTIALS[0])
         PASSWORD.send_keys(CREDENTIALS[1])
         # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
+
+        # TODO: このページ遷移を切り出す
         PASSWORD.send_keys(Keys.RETURN)
     
     def __register(self):
@@ -58,13 +60,23 @@ class NanacoAutoFiller:
         except NoSuchElementException:
             return False
 
+    def __go_to_login_page(self):
+        '''
+        nanacoのログインページへアクセス
+        https://gyazo.com/7f85b3bc21371319533afe7a30f52da2
+        '''
+        self.__driver.get('https://www.nanaco-net.jp/pc/emServlet')
+
+    def __go_to_register_page(self):
+        '''ギフト登録約款ページに飛ぶ'''
+        self.__driver.find_element_by_css_selector('#memberNavi02').click()
+
+
     def main(self):
         # TODO: usageを書く
-        # nanacoのログインページへアクセス
-        self.__driver.get('https://www.nanaco-net.jp/pc/emServlet')
+        self.__go_to_login_page()
         self.__login()
-        # ギフト登録約款ページに飛ぶ
-        self.__driver.find_element_by_css_selector('#memberNavi02').click()
+        self.__go_to_register_page()
 
         # コードの数だけ入力を繰り返す
         # コードを全て取得する
