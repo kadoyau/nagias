@@ -16,6 +16,8 @@ class NanacoAutoFiller:
         self.__driver = self.__init_driver()
         # タイムアウトまでのデフォルト秒数を指定する
         self.__driver.implicitly_wait(3)
+        with open('.secret') as f:
+            self.__CREDENTIALS = f.read().strip().split('\t')
     
     def __init_driver(self):
         '''Chrome起動時のオプションの設定をしてドライバを返す'''
@@ -42,11 +44,9 @@ class NanacoAutoFiller:
         '''nanacoのサイトにログインする'''
         EMAIL = self.__driver.find_element_by_css_selector('#loginByPassword input[type=text]')
         PASSWORD = self.__driver.find_element_by_css_selector('#loginByPassword input[type=password]')
-        with open('.secret') as f:
-            CREDENTIALS = f.read().strip().split('\t')
 
-        EMAIL.send_keys(CREDENTIALS[0])
-        PASSWORD.send_keys(CREDENTIALS[1])
+        EMAIL.send_keys(self.__CREDENTIALS[0])
+        PASSWORD.send_keys(self.__CREDENTIALS[1])
         # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
 
         # TODO: このページ遷移を切り出す
