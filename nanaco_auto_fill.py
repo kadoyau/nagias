@@ -1,5 +1,5 @@
 """
-nanacoギフトカードの登録をするプログラム
+複数行のnanacoギフトカードの登録を自動化する
 """
 import sys
 from pprint import pprint
