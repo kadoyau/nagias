@@ -35,10 +35,9 @@ class NanacoAutoFiller:
         SPLIT_LENGTH = 4
         SPLITED_CODES = [code[i: i + SPLIT_LENGTH] for i in range(0, len(code), SPLIT_LENGTH)]
         # コードを入力する
-        self.__driver.find_element_by_id('gift01').send_keys(SPLITED_CODES[0])
-        self.__driver.find_element_by_id('gift02').send_keys(SPLITED_CODES[1])
-        self.__driver.find_element_by_id('gift03').send_keys(SPLITED_CODES[2])
-        self.__driver.find_element_by_id('gift04').send_keys(SPLITED_CODES[3])
+        for i in range(SPLIT_LENGTH):
+            ID = 'gift0' + str(i+1) # gift01 to gift04
+            self.__driver.find_element_by_id(ID).send_keys(SPLITED_CODES[i])
     
     def __login(self):
         '''nanacoのサイトにログインする'''
