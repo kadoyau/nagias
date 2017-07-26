@@ -19,6 +19,9 @@ class NanacoAutoFiller:
         # ログインに必要な情報を読み込む
         with open('.secret') as f:
             self.__CREDENTIALS = f.read().strip().split('\t')
+        # コードを全て取得する
+        with open('.giftcodes') as f:
+            self.__codes = f.read().splitlines()
     
     def __init_driver(self):
         '''Chrome起動時のオプションの設定をしてドライバを返す'''
@@ -78,12 +81,8 @@ class NanacoAutoFiller:
         self.__login()
         self.__go_to_agreement_page()
 
-        # コードの数だけ入力を繰り返す
-        # コードを全て取得する
-        with open('.giftcodes') as f:
-            CODES = f.read().splitlines()
+        for code in self.__codes:
 
-        for code in CODES:
             # ギフト登録ページにジャンプする
             self.__driver.find_element_by_css_selector('#register input[type=image]').click()
             # ギフト登録ページのウィンドウに制御を移す
