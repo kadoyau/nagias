@@ -16,6 +16,7 @@ class NanacoAutoFiller:
         self.__driver = self.__init_driver()
         # タイムアウトまでのデフォルト秒数を指定する
         self.__driver.implicitly_wait(3)
+        # ログインに必要な情報を読み込む
         with open('.secret') as f:
             self.__CREDENTIALS = f.read().strip().split('\t')
     
@@ -66,8 +67,8 @@ class NanacoAutoFiller:
         '''
         self.__driver.get('https://www.nanaco-net.jp/pc/emServlet')
 
-    def __go_to_register_page(self):
-        '''ギフト登録約款ページに飛ぶ'''
+    def __go_to_agreement_page(self):
+        '''ギフト登録約款ページへアクセス'''
         self.__driver.find_element_by_css_selector('#memberNavi02').click()
 
 
@@ -75,7 +76,7 @@ class NanacoAutoFiller:
         # TODO: usageを書く
         self.__go_to_login_page()
         self.__login()
-        self.__go_to_register_page()
+        self.__go_to_agreement_page()
 
         # コードの数だけ入力を繰り返す
         # コードを全て取得する
