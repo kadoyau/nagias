@@ -78,6 +78,12 @@ class NanacoAutoFiller:
         '''ギフトコード入力ページへアクセス'''
         self.__driver.find_element_by_css_selector('#register input[type=image]').click()
 
+    def __get_register_page_handle(self):
+        '''ギフトコード入力ページ（別ウィンドウ）のハンドラを取得する'''
+        WebDriverWait(self.__driver, 3).until(lambda d: len(d.window_handles) > 1)
+        gift_page_handle = self.__driver.window_handles[1]
+        return gift_page_handle
+
     def __go_to_register_confirm_page(self):
         '''ギフトID内容登録確認ページへアクセス
         http://qiita.com/QUANON/items/285ad7157619b0da5c67
@@ -96,10 +102,8 @@ class NanacoAutoFiller:
             # ギフト登録ページのウィンドウに制御を移す
             main_page =  self.__driver.window_handles[0]
 
-            # 別ウィンドウのハンドラを取得する
-            WebDriverWait(self.__driver, 3).until(lambda d: len(d.window_handles) > 1)
-            gift_page_handle =  self.__driver.window_handles[1]
-            self.__driver.switch_to.window(gift_page_handle)
+            register_page_handle = self.__get_register_page_handle()
+            self.__driver.switch_to.window(register_page_handle)
 
             self.__input_codes(code)
             self.__go_to_register_confirm_page()
