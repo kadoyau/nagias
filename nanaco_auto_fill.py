@@ -7,12 +7,14 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+from logintype import LoginType
 
 class NanacoAutoFiller:
     __results = {'success':[], 'fairule':[]}
 
-    def __init__(self, use_canary = False):
+    def __init__(self, login_type, use_canary):
         self.__use_canary = use_canary
+        self.__login_type = login_type
         self.__driver = self.__init_driver()
         # タイムアウトまでのデフォルト秒数を指定する
         self.__driver.implicitly_wait(3)
@@ -45,8 +47,12 @@ class NanacoAutoFiller:
     
     def __login(self):
         '''nanacoのサイトにログインする'''
-        EMAIL = self.__driver.find_element_by_css_selector('#loginByPassword input[type=text]')
-        PASSWORD = self.__driver.find_element_by_css_selector('#loginByPassword input[type=password]')
+        if self.__login_type is LoginType.NET:
+            EMAIL = self.__driver.find_element_by_css_selector('#loginByPassword input[type=text]')
+            PASSWORD = self.__driver.find_element_by_css_selector('#loginByPassword input[type=password]')
+        elif self.__login_type is LoginType.CARD:
+            EMAIL = self.__driver.find_element_by_css_selector('#loginByCard input[name=XCID]')
+            PASSWORD = self.__driver.find_element_by_css_selector('#loginByCard input[name=SECURITY_CD]')
 
         EMAIL.send_keys(self.__CREDENTIALS[0])
         PASSWORD.send_keys(self.__CREDENTIALS[1])
@@ -127,10 +133,12 @@ class NanacoAutoFiller:
         pprint(self.__results["fairule"])
 
 if __name__ == '__main__':
-    arg_names = ['command', 'use_canary']
+    arg_names = ['command', 'login_type', 'use_canary']
     args = dict(zip(arg_names, sys.argv))
+
+    login_type_raw = int(args.get('login_type', 1)) #デフォルトはネット会員
     use_canary = args.get('use_canary', False)
 
-    nanaco = NanacoAutoFiller(use_canary)
+    nanaco = NanacoAutoFiller(LoginType(login_type_raw), use_canary)
     nanaco.main()
     nanaco.output()
