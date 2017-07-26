@@ -1,98 +1,136 @@
 """
-nanacoギフトカードの登録をするプログラム
+複数行のnanacoギフトカードの登録を自動化する
 """
+import sys
 from pprint import pprint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 
+class NanacoAutoFiller:
+    __results = {'success':[], 'fairule':[]}
 
-def main():
-    # TODO: usageを書く
-    # Chrome起動時のオプションの設定
-    options = webdriver.ChromeOptions()
-    #options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-    # 自分の環境だとCanaryでないと動かなかった
-    options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
-    # options.add_argument('headless')
-    options.add_argument('window-size=1200x600')
-    DRIVER = webdriver.Chrome(chrome_options=options)
+    def __init__(self, use_canary = False):
+        self.__use_canary = use_canary
+        self.__driver = self.__init_driver()
+        # タイムアウトまでのデフォルト秒数を指定する
+        self.__driver.implicitly_wait(3)
+        # ログインに必要な情報を読み込む
+        with open('.secret') as f:
+            self.__CREDENTIALS = f.read().strip().split('\t')
+        # コードを全て取得する
+        with open('.giftcodes') as f:
+            self.__codes = f.read().splitlines()
+    
+    def __init_driver(self):
+        '''Chrome起動時のオプションの設定をしてドライバを返す'''
+        options = webdriver.ChromeOptions()
+        if self.__use_canary:
+            options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
+        else:
+            options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        # options.add_argument('headless')
+        options.add_argument('window-size=1200x600')
+        return webdriver.Chrome(chrome_options=options)
 
-    # nanacoのログインページへアクセス
-    DRIVER.get('https://www.nanaco-net.jp/pc/emServlet')
-
-    # タイムアウトまでのデフォルト秒数を指定する
-    DRIVER.implicitly_wait(3)
-
-    # nanacoのサイトにログインする
-    EMAIL = DRIVER.find_element_by_css_selector('#loginByPassword input[type=text]')
-    PASSWORD = DRIVER.find_element_by_css_selector('#loginByPassword input[type=password]')
-    with open('.secret') as f:
-        CREDENTIALS = f.read().strip().split('\t')
-
-    EMAIL.send_keys(CREDENTIALS[0])
-    PASSWORD.send_keys(CREDENTIALS[1])
-    # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
-    PASSWORD.send_keys(Keys.RETURN)
-
-    # ギフト登録約款ページに飛ぶ
-    DRIVER.find_element_by_css_selector('#memberNavi02').click()
-
-
-    # コードの数だけ入力を繰り返す
-    # コードを全て取得する
-    with open('.giftcodes') as f:
-        CODES = f.read().splitlines()
-
-    results = {'success':[], 'fairule':[]}
-    for code in CODES:
-        # ギフト登録ページにジャンプする
-        DRIVER.find_element_by_css_selector('#register input[type=image]').click()
-
-        # ギフト登録ページのウィンドウに制御を移す
-        # @see http://qiita.com/QUANON/items/285ad7157619b0da5c67
-        main_page =  DRIVER.window_handles[0]
-
-        # 別ウィンドウのハンドラを取得する
-        WebDriverWait(DRIVER, 3).until(lambda d: len(d.window_handles) > 1)
-        gift_page_handle =  DRIVER.window_handles[1]
-        DRIVER.switch_to.window(gift_page_handle)
-
+    def __input_codes(self,code):
+        '''ギフトコードを入力する'''
         SPLIT_LENGTH = 4
-        splited_code = [code[i: i + SPLIT_LENGTH] for i in range(0, len(code), SPLIT_LENGTH)]
+        SPLITED_CODES = [code[i: i + SPLIT_LENGTH] for i in range(0, len(code), SPLIT_LENGTH)]
         # コードを入力する
-        DRIVER.find_element_by_id('gift01').send_keys(splited_code[0])
-        DRIVER.find_element_by_id('gift02').send_keys(splited_code[1])
-        DRIVER.find_element_by_id('gift03').send_keys(splited_code[2])
-        DRIVER.find_element_by_id('gift04').send_keys(splited_code[3])
+        for i in range(SPLIT_LENGTH):
+            ID = 'gift0' + str(i+1) # gift01 to gift04
+            self.__driver.find_element_by_id(ID).send_keys(SPLITED_CODES[i])
+    
+    def __login(self):
+        '''nanacoのサイトにログインする'''
+        EMAIL = self.__driver.find_element_by_css_selector('#loginByPassword input[type=text]')
+        PASSWORD = self.__driver.find_element_by_css_selector('#loginByPassword input[type=password]')
 
-        DRIVER.find_element_by_id('submit-button').click()
+        EMAIL.send_keys(self.__CREDENTIALS[0])
+        PASSWORD.send_keys(self.__CREDENTIALS[1])
+        # @see http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.keys
 
-        # 登録するボタンを押す
+        # TODO: このページ遷移を切り出す
+        PASSWORD.send_keys(Keys.RETURN)
+    
+    def __register(self):
+        '''登録するボタンを押す'''
         try:
-            DRIVER.find_element_by_css_selector('#nav2Next input[type=image]').click()
-            results["success"].append(code)
+            self.__driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
+            return True
         except NoSuchElementException:
-            results["fairule"].append(code)
+            return False
 
-        # 当該ウィンドウを終了する
-        # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
-        DRIVER.close()
+    def __go_to_login_page(self):
+        '''
+        nanacoのログインページへアクセス
+        https://gyazo.com/7f85b3bc21371319533afe7a30f52da2
+        '''
+        self.__driver.get('https://www.nanaco-net.jp/pc/emServlet')
 
-        # はじめのウィンドウに戻る
-        DRIVER.switch_to.window(main_page)
+    def __go_to_agreement_page(self):
+        '''ギフト登録約款ページへアクセス'''
+        self.__driver.find_element_by_css_selector('#memberNavi02').click()
 
-    DRIVER.quit()
-    return results
+    def __go_to_register_page(self):
+        '''ギフトコード入力ページへアクセス'''
+        self.__driver.find_element_by_css_selector('#register input[type=image]').click()
 
+    def __get_register_page_handle(self):
+        '''ギフトコード入力ページ（別ウィンドウ）のハンドラを取得する'''
+        WebDriverWait(self.__driver, 3).until(lambda d: len(d.window_handles) > 1)
+        gift_page_handle = self.__driver.window_handles[1]
+        return gift_page_handle
 
-def show_results(results):
-    """結果を表示する"""
-    print('SUCCESS: ' + str(len(results["success"])))
-    print('FAIRULE: ' + str(len(results["fairule"])))
-    pprint(results["fairule"])
+    def __go_to_register_confirm_page(self):
+        '''ギフトID内容登録確認ページへアクセス
+        http://qiita.com/QUANON/items/285ad7157619b0da5c67
+        '''
+        self.__driver.find_element_by_id('submit-button').click()
+
+    def main(self):
+        # TODO: usageを書く
+        self.__go_to_login_page()
+        self.__login()
+        self.__go_to_agreement_page()
+
+        for code in self.__codes:
+            self.__go_to_register_page()
+
+            # ギフト登録ページのウィンドウに制御を移す
+            main_page =  self.__driver.window_handles[0]
+
+            register_page_handle = self.__get_register_page_handle()
+            self.__driver.switch_to.window(register_page_handle)
+
+            self.__input_codes(code)
+            self.__go_to_register_confirm_page()
+
+            if self.__register():
+                self.__results["success"].append(code)
+            else:
+                self.__results["fairule"].append(code)
+            # 当該ウィンドウを終了する
+            # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
+            self.__driver.close()
+
+            # はじめのウィンドウに戻る
+            self.__driver.switch_to.window(main_page)
+        self.__driver.quit()
+
+    def output(self):
+        """結果を表示する"""
+        print('SUCCESS: ' + str(len(self.__results["success"])))
+        print('FAIRULE: ' + str(len(self.__results["fairule"])))
+        pprint(self.__results["fairule"])
 
 if __name__ == '__main__':
-    RESULTS = main()
-    show_results(RESULTS)
+    arg_names = ['command', 'use_canary']
+    args = dict(zip(arg_names, sys.argv))
+    use_canary = args.get('use_canary', False)
+
+    nanaco = NanacoAutoFiller(use_canary)
+    nanaco.main()
+    nanaco.output()
