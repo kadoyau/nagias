@@ -13,9 +13,11 @@ from logintype import LoginType
 class NanacoAutoFiller:
     __results = {'success':[], 'fairule':[]}
 
-    def __init__(self, login_type, use_canary):
+    def __init__(self, login_type, use_canary, is_quiet):
         self.__use_canary = use_canary
         self.__login_type = login_type
+        self.__is_quiet = is_quiet
+
         self.__driver = self.__init_driver()
         # タイムアウトまでのデフォルト秒数を指定する
         self.__driver.implicitly_wait(3)
@@ -33,7 +35,8 @@ class NanacoAutoFiller:
             options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
         else:
             options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-        # options.add_argument('headless')
+        if self.__is_quiet:
+            options.add_argument('headless')
         options.add_argument('window-size=1200x600')
         return webdriver.Chrome(chrome_options=options)
 
@@ -146,6 +149,11 @@ if __name__ == '__main__':
         "-c", "--use_canary",
         help="ブラウザとしてChrome Canaryを使う（デフォルトはChrome）", 
         action="store_true"
+    )
+    parser.add_argument(
+        "-q", "--quiet",
+       help="Chromeのheadless modeを利用する",
+       action="store_true"
     )
     args = parser.parse_args()
 
