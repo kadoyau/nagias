@@ -2,6 +2,7 @@
 複数行のnanacoギフトカードの登録を自動化する
 """
 import sys
+import argparse
 from pprint import pprint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -133,12 +134,21 @@ class NanacoAutoFiller:
         pprint(self.__results["fairule"])
 
 if __name__ == '__main__':
-    arg_names = ['command', 'login_type', 'use_canary']
-    args = dict(zip(arg_names, sys.argv))
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-t", "--login_type",
+        help="1：会員メニュー用パスワードでログイン, 2：カード記載の番号でログイン", 
+        type=int, 
+        choices=[1, 2],
+        default=1
+    )
+    parser.add_argument(
+        "-c", "--use_canary",
+        help="ブラウザとしてChrome Canaryを使う（デフォルトはChrome）", 
+        action="store_true"
+    )
+    args = parser.parse_args()
 
-    login_type_raw = int(args.get('login_type', 1)) #デフォルトはネット会員
-    use_canary = args.get('use_canary', False)
-
-    nanaco = NanacoAutoFiller(LoginType(login_type_raw), use_canary)
+    nanaco = NanacoAutoFiller(LoginType(args.login_type), args.use_canary, args.quiet)
     nanaco.main()
     nanaco.output()
