@@ -66,7 +66,7 @@ Chrome 62.0.3168.0では問題ありませんでした。
 
 ## 設定ファイルの作り方
 ### .secretの中身
-タブ区切りでID/Passをかきます
+**タブ区切り**でID/Passをかきます
 ```
 YOUR_LOGIN_ID  YOUR_PASSWORD
 ```
