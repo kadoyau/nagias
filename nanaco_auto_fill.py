@@ -2,17 +2,22 @@
 複数行のnanacoギフトカードの登録を自動化する
 """
 import sys
+import argparse
 from pprint import pprint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+from logintype import LoginType
 
 class NanacoAutoFiller:
     __results = {'success':[], 'fairule':[]}
 
-    def __init__(self, use_canary = False):
+    def __init__(self, login_type, use_canary, is_quiet):
         self.__use_canary = use_canary
+        self.__login_type = login_type
+        self.__is_quiet = is_quiet
+
         self.__driver = self.__init_driver()
         # タイムアウトまでのデフォルト秒数を指定する
         self.__driver.implicitly_wait(3)
@@ -30,7 +35,8 @@ class NanacoAutoFiller:
             options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
         else:
             options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-        # options.add_argument('headless')
+        if self.__is_quiet:
+            options.add_argument('headless')
         options.add_argument('window-size=1200x600')
         return webdriver.Chrome(chrome_options=options)
 
@@ -45,8 +51,12 @@ class NanacoAutoFiller:
     
     def __login(self):
         '''nanacoのサイトにログインする'''
-        EMAIL = self.__driver.find_element_by_css_selector('#loginByPassword input[type=text]')
-        PASSWORD = self.__driver.find_element_by_css_selector('#loginByPassword input[type=password]')
+        if self.__login_type is LoginType.NET:
+            EMAIL = self.__driver.find_element_by_css_selector('#loginByPassword input[type=text]')
+            PASSWORD = self.__driver.find_element_by_css_selector('#loginByPassword input[type=password]')
+        elif self.__login_type is LoginType.CARD:
+            EMAIL = self.__driver.find_element_by_css_selector('#loginByCard input[name=XCID]')
+            PASSWORD = self.__driver.find_element_by_css_selector('#loginByCard input[name=SECURITY_CD]')
 
         EMAIL.send_keys(self.__CREDENTIALS[0])
         PASSWORD.send_keys(self.__CREDENTIALS[1])
@@ -127,10 +137,26 @@ class NanacoAutoFiller:
         pprint(self.__results["fairule"])
 
 if __name__ == '__main__':
-    arg_names = ['command', 'use_canary']
-    args = dict(zip(arg_names, sys.argv))
-    use_canary = args.get('use_canary', False)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-t", "--login_type",
+        help="1：会員メニュー用パスワードでログイン, 2：カード記載の番号でログイン", 
+        type=int, 
+        choices=[1, 2],
+        default=1
+    )
+    parser.add_argument(
+        "-c", "--use_canary",
+        help="ブラウザとしてChrome Canaryを使う（デフォルトはChrome）", 
+        action="store_true"
+    )
+    parser.add_argument(
+        "-q", "--quiet",
+       help="Chromeのheadless modeを利用する",
+       action="store_true"
+    )
+    args = parser.parse_args()
 
-    nanaco = NanacoAutoFiller(use_canary)
+    nanaco = NanacoAutoFiller(LoginType(args.login_type), args.use_canary, args.quiet)
     nanaco.main()
     nanaco.output()
