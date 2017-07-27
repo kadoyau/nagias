@@ -2,8 +2,9 @@
 
 # 使い方(macOS）
 ## 事前準備
-- [Chrome Canary](https://www.google.co.jp/chrome/browser/canary.html)をインストールする  
-  - `/Applications` 直下におく
+- [Chrome](https://www.google.co.jp/chrome/browser/desktop/index.html)および[Chrome Canary](https://www.google.co.jp/chrome/browser/canary.html)をインストールする
+  - `/Applications` 直下におく
+  - 使いたい方だけ入れれば問題ない（デフォルトはChromeを利用する）
 - 以下の手順に従ってselenium等を導入
 ```
 git clone git@github.com:kadoyau/nagias.git
@@ -35,19 +36,33 @@ $EDITOR .secret
 # ギフトコードを入力する
 $EDITOR .giftcodes 
 ```
-## 実行
+## 使い方
 
-### モバイル会員・ネット会員
-
+### 実行方法
+モバイル会員・ネット会員
 ```
 python nanaco_auto_fill.py
 ```
 
-### カード会員
+カード会員
 
 ```
-python nanaco_auto_fill_card.py
+python nanaco_auto_fill.py -t 2
 ```
+### 詳細な使い方
+以下のコマンドでヘルプを表示できます。
+```
+python nanaco_auto_fill.py -h
+```
+#### 注意
+`-q`オプションを使う際には、`-c`と組み合わせて利用しないとエラーが発生します。
+
+再現環境
+ - headless chrome=60.0.3112.78
+ - chromedriver=2.30.477690
+ - Mac OS X 10.12.5
+
+Chrome 62.0.3168.0では問題ありませんでした。
 
 ## 設定ファイルの作り方
 ### .secretの中身
