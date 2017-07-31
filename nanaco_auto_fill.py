@@ -101,7 +101,6 @@ class NanacoAutoFiller:
         self.__driver.find_element_by_id('submit-button').click()
 
     def main(self):
-        # TODO: usageを書く
         self.__go_to_login_page()
         self.__login()
         self.__go_to_agreement_page()
