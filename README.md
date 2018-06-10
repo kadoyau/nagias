@@ -87,3 +87,6 @@ bcdefghijklmnopq
 2. https://github.com/kadoyau/nagias/raw/master/code_extractor.user.js をひらいてユーザスクリプトをインストールする
 3. ギフトコードが送られてくるページへアクセスするとコピペ用のテキストエリアにコードが出現
 4. `.giftcodes`にペーストする
+
+## よくある質問
+https://scrapbox.io/kadoyau/nagias_FAQ
