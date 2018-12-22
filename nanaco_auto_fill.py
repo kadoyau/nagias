@@ -9,6 +9,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from logintype import LoginType
+import time
 
 class NanacoAutoFiller:
     __results = {'success':[], 'fairule':[]}
@@ -27,7 +28,7 @@ class NanacoAutoFiller:
         # コードを全て取得する
         with open('.giftcodes') as f:
             self.__codes = f.read().splitlines()
-    
+
     def __init_driver(self):
         '''Chrome起動時のオプションの設定をしてドライバを返す'''
         options = webdriver.ChromeOptions()
@@ -48,7 +49,7 @@ class NanacoAutoFiller:
         for i in range(SPLIT_LENGTH):
             ID = 'gift0' + str(i+1) # gift01 to gift04
             self.__driver.find_element_by_id(ID).send_keys(SPLITED_CODES[i])
-    
+
     def __login(self):
         '''nanacoのサイトにログインする'''
         if self.__login_type is LoginType.NET:
@@ -64,7 +65,7 @@ class NanacoAutoFiller:
 
         # TODO: このページ遷移を切り出す
         PASSWORD.send_keys(Keys.RETURN)
-    
+
     def __register(self):
         '''登録するボタンを押す'''
         try:
@@ -127,6 +128,7 @@ class NanacoAutoFiller:
 
             # はじめのウィンドウに戻る
             self.__driver.switch_to.window(main_page)
+            time.sleep(1)
         self.__driver.quit()
 
     def output(self):
@@ -139,14 +141,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-t", "--login_type",
-        help="1：会員メニュー用パスワードでログイン, 2：カード記載の番号でログイン", 
-        type=int, 
+        help="1：会員メニュー用パスワードでログイン, 2：カード記載の番号でログイン",
+        type=int,
         choices=[1, 2],
         default=1
     )
     parser.add_argument(
         "-c", "--use_canary",
-        help="ブラウザとしてChrome Canaryを使う（デフォルトはChrome）", 
+        help="ブラウザとしてChrome Canaryを使う（デフォルトはChrome）",
         action="store_true"
     )
     parser.add_argument(
