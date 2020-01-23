@@ -39,7 +39,7 @@ class NanacoAutoFiller:
         if self.__is_quiet:
             options.add_argument('headless')
         options.add_argument('window-size=1200x600')
-        return webdriver.Chrome(chrome_options=options)
+        return webdriver.Chrome(options=options)
 
     def __input_codes(self,code):
         '''ギフトコードを入力する'''
