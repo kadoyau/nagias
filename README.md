@@ -24,7 +24,7 @@ PLATFORM=mac64
 VERSION=$(curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
 curl http://chromedriver.storage.googleapis.com/$VERSION/chromedriver_$PLATFORM.zip \
 | bsdtar -xvf - -C env/bin/
-chmod u+x chromedriver
+chmod u+x env/bin/chromedriver
 
 # 実行確認
 chromedriver
