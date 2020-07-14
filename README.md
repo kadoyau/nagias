@@ -6,7 +6,7 @@
   - `/Applications` 直下におく
   - 使いたい方だけ入れれば問題ない（デフォルトはChromeを利用する）
 - 以下の手順に従ってselenium等を導入
-```
+```zsh
 git clone git@github.com:kadoyau/nagias.git
 cd nagias
 
