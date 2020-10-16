@@ -14,10 +14,10 @@ RUN curl -o ./chrome.deb https://dl.google.com/linux/direct/google-chrome-stable
                 ./chrome.deb && \
     rm -rf /var/lib/apt/lists/*
 
-RUN PLATFORM=linux64 && \
-    SHORTEN_CHROME_VERSION=$(google-chrome --version | sed 's/[^0-9.]*//g' | sed 's/.[0-9]*$//') && \
-    CHROMEDRIVER_VERSION=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$SHORTEN_CHROME_VERSION) && \
-    curl -o ./chromedriver.zip http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_$PLATFORM.zip && \
+RUN platform=linux64 && \
+    shorten_chrome_version=$(google-chrome --version | sed 's/[^0-9.]*//g' | sed 's/.[0-9]*$//') && \
+    chromedriver_version=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$shorten_chrome_version) && \
+    curl -o ./chromedriver.zip http://chromedriver.storage.googleapis.com/$chromedriver_version/chromedriver_$platform.zip && \
     unzip ./chromedriver.zip -d /usr/bin/ && \
     chmod +x /usr/bin/chromedriver
 
