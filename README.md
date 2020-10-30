@@ -65,7 +65,68 @@ python nanaco_auto_fill.py -h
 
 Chrome 62.0.3168.0では問題ありませんでした。
 
-## 設定ファイルの作り方
+# Docker
+## 動作環境
+- OS
+  - macOS
+  - Linux(Ubuntu, etc.)
+
+- Programs
+  - [Docker](https://www.docker.com/)
+  
+    [Installation guide in English](https://docs.docker.com/get-docker/)
+    
+    [インストール方法（日本語版）](https://docs.docker.jp/get-docker.html)
+  
+  - [Git](https://git-scm.com/) (任意)
+  
+    このリポジトリ取得用
+
+## 使い方
+### 1. このリポジトリをダウンロード
+```
+git clone https://github.com/kadoyau/nagias.git
+cd nagias
+```
+
+### 2. IDとpasswordの設定を記述・ギフトコードを入力（[設定ファイルの作り方](#設定ファイルの作り方)を参照）
+```
+$EDITOR .secret
+$EDITOR .giftcodes
+```
+
+### 3. Dockerイメージを構築
+```
+docker build -t nagias .
+```
+
+### 4. コンテナとしてイメージを実行
+モバイル会員・ネット会員
+```
+docker run --rm --name nagias \
+           -v $PWD/.secret:/root/.secret \
+           -v $PWD/.giftcodes:/root/.giftcodes \
+           nagias python nanaco_auto_fill.py -d
+```
+
+カード会員
+```
+docker run --rm --name nagias \
+           -v $PWD/.secret:/root/.secret \
+           -v $PWD/.giftcodes:/root/.giftcodes \
+           nagias python nanaco_auto_fill.py -t 2 -d
+```
+
+## 検証環境
+- Ubuntu 20.04.1 LTS
+  - Docker 19.03.13
+  - git 2.25.1
+- Docker Image: python:3.9.0-buster
+  - Chromium 83.0.4103.116
+  - ChromeDriver 83.0.4103.39
+  - selenium 3.141.0
+
+# 設定ファイルの作り方
 ### .secretの中身
 **タブ区切り**でID/Passをかきます
 ```
