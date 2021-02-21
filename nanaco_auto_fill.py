@@ -34,9 +34,8 @@ class NanacoAutoFiller:
         '''Chrome起動時のオプションの設定をしてドライバを返す'''
         options = webdriver.ChromeOptions()
         if self.__is_docker:
-            options.binary_location = '/usr/bin/chromium'
+            options.binary_location = '/usr/bin/chromium-browser'
             options.add_argument('--headless')
-            options.add_argument('--no-sandbox')
             return webdriver.Chrome(options=options)
         if self.__use_canary:
             options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'

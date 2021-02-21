@@ -1,31 +1,28 @@
-# Python3 Debian image
-FROM python:3
+# Official Python Docker image
+# https://hub.docker.com/_/python
+FROM python:3-alpine
 LABEL maintainer="Yichi Zhang <ichicho@keio.jp>"
 
-WORKDIR /root
+# Non-root user name
+ARG user=nagias
 
-# Basic packages
-RUN apt update && \
-    apt install -y --no-install-recommends \
-                curl \
-                unzip \
-                chromium && \
-    rm -rf /var/lib/apt/lists/*
+# Install Chromium, ChromeDriver, Selenium
+RUN apk add --no-cache \
+            curl \
+            chromium \
+            chromium-chromedriver && \
+    pip install --no-cache-dir selenium
 
-# Install ChromeDriver
-# https://chromedriver.chromium.org/downloads/version-selection
-RUN platform=linux64 && \
-    shorten_chrome_version=$(chromium --product-version | sed 's/.[0-9]*$//') && \
-    chromedriver_version=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$shorten_chrome_version) && \
-    curl -o ./chromedriver.zip http://chromedriver.storage.googleapis.com/$chromedriver_version/chromedriver_$platform.zip && \
-    unzip ./chromedriver.zip -d /usr/bin/ && \
-    chmod +x /usr/bin/chromedriver
+# Add non-root user
+ARG home=/home/$user
+RUN addgroup -S $user && \
+    adduser -S $user -G $user
+USER $user
+WORKDIR $home
 
-# Install Selenium
-RUN pip install --no-cache-dir selenium
+# Copy necessary project files
+COPY nanaco_auto_fill.py $home
+COPY logintype.py $home
 
-# Run nagias
-COPY nanaco_auto_fill.py /root
-COPY logintype.py /root
 # Default usage: override CMD in *docker run* for proper logintype
 CMD ["echo", "Nothing happened. To use nagias, please follow the steps described in README.md."]

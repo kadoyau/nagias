@@ -104,18 +104,26 @@ docker build -t nagias .
 モバイル会員・ネット会員
 ```
 docker run --rm --name nagias \
-           -v $PWD/.secret:/root/.secret \
-           -v $PWD/.giftcodes:/root/.giftcodes \
+           -v $PWD/.secret:/home/nagias/.secret \
+           -v $PWD/.giftcodes:/home/nagias/.giftcodes \
+           --security-opt seccomp=$PWD/chrome.json \
            nagias python nanaco_auto_fill.py -d
 ```
 
 カード会員
 ```
 docker run --rm --name nagias \
-           -v $PWD/.secret:/root/.secret \
-           -v $PWD/.giftcodes:/root/.giftcodes \
+           -v $PWD/.secret:/home/nagias/.secret \
+           -v $PWD/.giftcodes:/home/nagias/.giftcodes \
+           --security-opt seccomp=$PWD/chrome.json \
            nagias python nanaco_auto_fill.py -t 2 -d
 ```
+
+## Dockerのセキュリティ
+- [Seccomp security profilesのDocker公式解説](https://docs.docker.com/engine/security/seccomp/)
+- [Chrome Headlessを安全に使うために](https://github.com/Zenika/alpine-chrome#-the-best-with-seccomp)
+
+Docker用のSeccomp Profileは[jessfraz](https://github.com/jessfraz)の[chrome.json](https://github.com/jessfraz/dotfiles/blob/master/etc/docker/seccomp/chrome.json)を使っています。
 
 ## 検証環境
 - Ubuntu 20.04.1 LTS
