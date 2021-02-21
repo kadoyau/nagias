@@ -1,75 +1,11 @@
 ナナコギフト入力で日曜日を溶かすのは、もうおしまいにしよう
 
-# 使い方(macOS）
-## 事前準備
-- [Chrome](https://www.google.co.jp/chrome/browser/desktop/index.html)および[Chrome Canary](https://www.google.co.jp/chrome/browser/canary.html)をインストールする
-  - `/Applications` 直下におく
-  - 使いたい方だけ入れれば問題ない（デフォルトはChromeを利用する）
-- 以下の手順に従ってselenium等を導入
-```zsh
-git clone git@github.com:kadoyau/nagias.git
-cd nagias
-
-# virtualenvのインストール
-pip install virtualenv
-# virtualenvをアクティベート（ここで/env/binが生成される）
-virtualenv env
-source env/bin/activate
-
-# Seleniumのインストール
-pip install selenium
-
-# Chrome Driverのインストール
-PLATFORM=mac64
-VERSION=$(curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-curl http://chromedriver.storage.googleapis.com/$VERSION/chromedriver_$PLATFORM.zip \
-| bsdtar -xvf - -C env/bin/
-chmod u+x env/bin/chromedriver
-
-# 実行確認
-chromedriver
-Starting ChromeDriver 2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262) on port 9515
-Only local connections are allowed.
-# Ctrl-Cなどで一旦切断する
-
-# IDとpasswordの設定を記述
-$EDITOR .secret
-# ギフトコードを入力する
-$EDITOR .giftcodes 
-```
-## 使い方
-
-### 実行方法
-モバイル会員・ネット会員
-```
-python nanaco_auto_fill.py
-```
-
-カード会員
-
-```
-python nanaco_auto_fill.py -t 2
-```
-### 詳細な使い方
-以下のコマンドでヘルプを表示できます。
-```
-python nanaco_auto_fill.py -h
-```
-#### 注意
-`-q`オプションを使う際には、`-c`と組み合わせて利用しないとエラーが発生します。
-
-再現環境
- - headless chrome=60.0.3112.78
- - chromedriver=2.30.477690
- - Mac OS X 10.12.5
-
-Chrome 62.0.3168.0では問題ありませんでした。
-
-# Docker
+# Dockerでの実行 (recommended)
 ## 動作環境
 - OS
   - macOS
   - Linux(Ubuntu, etc.)
+  - Windows
 
 - Programs
   - [Docker](https://www.docker.com/)
@@ -142,6 +78,72 @@ Docker用のSeccomp Profileは[jessfraz](https://github.com/jessfraz)の[chrome.
   - Chromium 86.0.4240.111
   - ChromeDriver 86.0.4240.111
   - Selenium 3.141.0
+
+# 使い方(macOS）
+## 事前準備
+- [Chrome](https://www.google.co.jp/chrome/browser/desktop/index.html)および[Chrome Canary](https://www.google.co.jp/chrome/browser/canary.html)をインストールする
+  - `/Applications` 直下におく
+  - 使いたい方だけ入れれば問題ない（デフォルトはChromeを利用する）
+- 以下の手順に従ってselenium等を導入
+```zsh
+git clone git@github.com:kadoyau/nagias.git
+cd nagias
+
+# virtualenvのインストール
+pip install virtualenv
+# virtualenvをアクティベート（ここで/env/binが生成される）
+virtualenv env
+source env/bin/activate
+
+# Seleniumのインストール
+pip install selenium
+
+# Chrome Driverのインストール
+PLATFORM=mac64
+VERSION=$(curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+curl http://chromedriver.storage.googleapis.com/$VERSION/chromedriver_$PLATFORM.zip \
+| bsdtar -xvf - -C env/bin/
+chmod u+x env/bin/chromedriver
+
+# 実行確認
+chromedriver
+Starting ChromeDriver 2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262) on port 9515
+Only local connections are allowed.
+# Ctrl-Cなどで一旦切断する
+
+# IDとpasswordの設定を記述
+$EDITOR .secret
+# ギフトコードを入力する
+$EDITOR .giftcodes 
+```
+## 使い方
+
+### 実行方法
+モバイル会員・ネット会員
+```
+python nanaco_auto_fill.py
+```
+
+カード会員
+
+```
+python nanaco_auto_fill.py -t 2
+```
+### 詳細な使い方
+以下のコマンドでヘルプを表示できます。
+```
+python nanaco_auto_fill.py -h
+```
+#### 注意
+`-q`オプションを使う際には、`-c`と組み合わせて利用しないとエラーが発生します。
+
+再現環境
+ - headless chrome=60.0.3112.78
+ - chromedriver=2.30.477690
+ - Mac OS X 10.12.5
+
+Chrome 62.0.3168.0では問題ありませんでした。
+
 
 # 設定ファイルの作り方
 ### .secretの中身
