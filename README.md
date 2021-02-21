@@ -126,13 +126,13 @@ docker run --rm --name nagias \
 Docker用のSeccomp Profileは[jessfraz](https://github.com/jessfraz)の[chrome.json](https://github.com/jessfraz/dotfiles/blob/master/etc/docker/seccomp/chrome.json)を使っています。
 
 ## 検証環境
-- Ubuntu 20.04.1 LTS
-  - Docker 19.03.13
+- Ubuntu 20.04.2 LTS
+  - Docker 20.10.3
   - git 2.25.1
-- Docker Image: python:3.9.0-buster
-  - Chromium 83.0.4103.116
-  - ChromeDriver 83.0.4103.39
-  - selenium 3.141.0
+- Docker Image: python:3.9.2-alpine3.13
+  - Chromium 86.0.4240.111
+  - ChromeDriver 86.0.4240.111
+  - Selenium 3.141.0
 
 # 設定ファイルの作り方
 ### .secretの中身
