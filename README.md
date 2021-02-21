@@ -65,7 +65,85 @@ python nanaco_auto_fill.py -h
 
 Chrome 62.0.3168.0では問題ありませんでした。
 
-## 設定ファイルの作り方
+# Docker
+## 動作環境
+- OS
+  - macOS
+  - Linux(Ubuntu, etc.)
+
+- Programs
+  - [Docker](https://www.docker.com/)
+  
+    [Installation guide in English](https://docs.docker.com/get-docker/)
+    
+    [インストール方法（日本語版）](https://docs.docker.jp/get-docker.html)
+  
+  - [Git](https://git-scm.com/) (任意)
+  
+    このリポジトリ取得用
+
+## 使い方
+### 1. このリポジトリをダウンロード
+```
+git clone https://github.com/kadoyau/nagias.git
+cd nagias
+```
+
+### 2. 必要なファイルを用意
+IDとpasswordの設定を記述・ギフトコードを入力（[設定ファイルの作り方](#設定ファイルの作り方)を参照）
+```
+$EDITOR .secret
+$EDITOR .giftcodes
+```
+Chrome向けのseccomp profileを用意する
+```
+// macOS/Linux
+wget https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -O chrome.json
+
+// windows
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -OutFile chrome.json
+```
+
+### 3. Dockerイメージを構築
+```
+docker build -t nagias .
+```
+
+### 4. コンテナとしてイメージを実行
+モバイル会員・ネット会員
+```
+docker run --rm --name nagias \
+           -v $PWD/.secret:/home/nagias/.secret \
+           -v $PWD/.giftcodes:/home/nagias/.giftcodes \
+           --security-opt seccomp=$PWD/chrome.json \
+           nagias python nanaco_auto_fill.py -d
+```
+
+カード会員
+```
+docker run --rm --name nagias \
+           -v $PWD/.secret:/home/nagias/.secret \
+           -v $PWD/.giftcodes:/home/nagias/.giftcodes \
+           --security-opt seccomp=$PWD/chrome.json \
+           nagias python nanaco_auto_fill.py -t 2 -d
+```
+
+## Dockerのセキュリティ
+- [Seccomp security profilesのDocker公式解説](https://docs.docker.com/engine/security/seccomp/)
+- [Chrome Headlessを安全に使うために](https://github.com/Zenika/alpine-chrome#-the-best-with-seccomp)
+
+Docker用のSeccomp Profileは[jessfraz](https://github.com/jessfraz)の[chrome.json](https://github.com/jessfraz/dotfiles/blob/master/etc/docker/seccomp/chrome.json)を使っています。
+
+## 検証環境
+- Ubuntu 20.04.2 LTS
+  - Docker 20.10.3
+  - git 2.25.1
+- Docker Image: python:3.9.2-alpine3.13
+  - Chromium 86.0.4240.111
+  - ChromeDriver 86.0.4240.111
+  - Selenium 3.141.0
+
+# 設定ファイルの作り方
 ### .secretの中身
 **タブ区切り**でID/Passをかきます
 ```

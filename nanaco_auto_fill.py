@@ -14,10 +14,11 @@ import time
 class NanacoAutoFiller:
     __results = {'success':[], 'fairule':[]}
 
-    def __init__(self, login_type, use_canary, is_quiet):
+    def __init__(self, login_type, use_canary, is_quiet, is_docker):
         self.__use_canary = use_canary
         self.__login_type = login_type
         self.__is_quiet = is_quiet
+        self.__is_docker = is_docker
 
         self.__driver = self.__init_driver()
         # タイムアウトまでのデフォルト秒数を指定する
@@ -32,10 +33,14 @@ class NanacoAutoFiller:
     def __init_driver(self):
         '''Chrome起動時のオプションの設定をしてドライバを返す'''
         options = webdriver.ChromeOptions()
+        if self.__is_docker:
+            options.binary_location = '/usr/bin/chromium-browser'
+            options.add_argument('--headless')
+            return webdriver.Chrome(options=options)
         if self.__use_canary:
             options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
         else:
-            options.binary_location ='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+            options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
         if self.__is_quiet:
             options.add_argument('headless')
         options.add_argument('window-size=1200x600')
@@ -156,8 +161,13 @@ if __name__ == '__main__':
        help="Chromeのheadless modeを利用する",
        action="store_true"
     )
+    parser.add_argument(
+        "-d", "--docker",
+       help="Option used for dockerized nagias",
+       action="store_true"
+    )
     args = parser.parse_args()
 
-    nanaco = NanacoAutoFiller(LoginType(args.login_type), args.use_canary, args.quiet)
+    nanaco = NanacoAutoFiller(LoginType(args.login_type), args.use_canary, args.quiet, args.docker)
     nanaco.main()
     nanaco.output()
