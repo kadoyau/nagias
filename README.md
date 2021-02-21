@@ -89,10 +89,19 @@ git clone https://github.com/kadoyau/nagias.git
 cd nagias
 ```
 
-### 2. IDとpasswordの設定を記述・ギフトコードを入力（[設定ファイルの作り方](#設定ファイルの作り方)を参照）
+### 2. 必要なファイルを用意
+IDとpasswordの設定を記述・ギフトコードを入力（[設定ファイルの作り方](#設定ファイルの作り方)を参照）
 ```
 $EDITOR .secret
 $EDITOR .giftcodes
+```
+Chrome向けのseccomp profileを用意する
+```
+// macOS/Linux
+wget https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -O chrome.json
+
+// windows
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -OutFile chrome.json
 ```
 
 ### 3. Dockerイメージを構築
