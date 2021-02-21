@@ -1,6 +1,6 @@
 ナナコギフト入力で日曜日を溶かすのは、もうおしまいにしよう
 
-# Dockerでの実行 (recommended)
+# Dockerを使った実行 (recommended)
 ## 動作環境
 - OS
   - macOS
@@ -79,7 +79,7 @@ Docker用のSeccomp Profileは[jessfraz](https://github.com/jessfraz)の[chrome.
   - ChromeDriver 86.0.4240.111
   - Selenium 3.141.0
 
-# 使い方(macOS）
+# macOSでの実行
 ## 事前準備
 - [Chrome](https://www.google.co.jp/chrome/browser/desktop/index.html)および[Chrome Canary](https://www.google.co.jp/chrome/browser/canary.html)をインストールする
   - `/Applications` 直下におく
