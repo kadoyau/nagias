@@ -64,7 +64,7 @@ docker run --rm --name nagias \
            nagias python nanaco_auto_fill.py -t 2 -d
 ```
 
-## Dockerのセキュリティ
+## 参考：Dockerのセキュリティ
 - [Seccomp security profilesのDocker公式解説](https://docs.docker.com/engine/security/seccomp/)
 - [Chrome Headlessを安全に使うために](https://github.com/Zenika/alpine-chrome#-the-best-with-seccomp)
 
