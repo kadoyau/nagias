@@ -12,7 +12,7 @@ from logintype import LoginType
 import time
 
 class NanacoAutoFiller:
-    __results = {'success':[], 'fairule':[]}
+    __results = {'success':[], 'failure':[]}
 
     def __init__(self, login_type, use_canary, is_quiet, is_docker):
         self.__use_canary = use_canary
@@ -126,7 +126,7 @@ class NanacoAutoFiller:
             if self.__register():
                 self.__results["success"].append(code)
             else:
-                self.__results["fairule"].append(code)
+                self.__results["failure"].append(code)
             # 当該ウィンドウを終了する
             # @see https://stackoverflow.com/questions/35286094/how-to-close-the-whole-browser-window-by-keeping-the-webdriver-active
             self.__driver.close()
@@ -139,8 +139,8 @@ class NanacoAutoFiller:
     def output(self):
         """結果を表示する"""
         print('SUCCESS: ' + str(len(self.__results["success"])))
-        print('FAIRULE: ' + str(len(self.__results["fairule"])))
-        pprint(self.__results["fairule"])
+        print('FAILURE: ' + str(len(self.__results["failure"])))
+        pprint(self.__results["failure"])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
