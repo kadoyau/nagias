@@ -2,3 +2,4 @@ env/
 .secret
 .giftcodes
 *.png
+**/__pycache__/
