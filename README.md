@@ -63,9 +63,10 @@ docker run --rm --name nagias \
 - Ubuntu 22.04 LTS
   - Docker 20.10.17
   - git 2.34.1
-- Docker Image python:3.10.5-slim-bullseye
-  - Firefox 91.10.0esr
+- Docker Image `python:3.10.5-slim-bullseye`
+  - Mozilla Firefox 91.10.0esr
   - geckodriver 0.31.0
+  - pip 22.0.4
   - Selenium 4.2.0
 
 # macOSでの実行
@@ -134,7 +135,7 @@ python nanaco_auto_fill.py -h
 Chrome 62.0.3168.0では問題ありませんでした。
 
 # Ubuntuでの実行
-macOSとほぼ同じなので、詳細を省く。デフォルトで入っているFirefoxを使う。
+macOSとほぼ同じなので詳細を省く。
 ## 事前準備
 ```
 sudo apt update
@@ -172,9 +173,11 @@ python nanaco_auto_fill.py -t 2 -u
 ## 検証環境
 - Ubuntu 22.04 LTS
   - git 2.34.1
-  - Firefox 91.10.0esr
+  - Mozilla Firefox 101.0
   - geckodriver 0.31.0
-  - Selenium 4.2.0
+  - Python 3.10.5
+    - pip 22.0.4
+    - Selenium 4.2.0
 
 # 設定ファイルの作り方
 ### .secretの中身
