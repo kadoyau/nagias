@@ -1,5 +1,11 @@
 ナナコギフト入力で日曜日を溶かすのは、もうおしまいにしよう
 
+- [Dockerを使った実行 (recommended)](#dockerを使った実行-recommended)
+- [macOSでの実行](#macosでの実行)
+- [Ubuntuでの実行](#ubuntuでの実行)
+- [設定ファイルの作り方](#設定ファイルの作り方)
+- [`.giftcodes`を作成しやすくする補助ツール](#giftcodesを作成しやすくする補助ツール)
+
 # Dockerを使った実行 (recommended)
 ## 動作環境
 - OS
@@ -30,14 +36,6 @@ IDとpasswordの設定を記述・ギフトコードを入力（[設定ファイ
 ```
 $EDITOR .secret
 $EDITOR .giftcodes
-```
-Chrome向けのseccomp profileを用意する
-```
-// macOS/Linux
-wget https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -O chrome.json
-
-// windows
-Invoke-WebRequest -Uri https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -OutFile chrome.json
 ```
 
 ### 3. Dockerイメージを構築
@@ -134,6 +132,34 @@ python nanaco_auto_fill.py -h
 
 Chrome 62.0.3168.0では問題ありませんでした。
 
+# Ubuntuでの実行
+
+```
+sudo apt update
+sudo apt install python3-pip
+
+git clone https://github.com/kadoyau/nagias.git
+cd nagias
+
+pip install virtualenv
+
+virtualenv env
+source env/bin/activate
+
+pip install selenium
+```
+
+### 実行方法
+モバイル会員・ネット会員
+```
+python nanaco_auto_fill.py -u
+```
+
+カード会員
+
+```
+python nanaco_auto_fill.py -t 2 -u
+```
 
 # 設定ファイルの作り方
 ### .secretの中身
