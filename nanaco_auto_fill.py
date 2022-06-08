@@ -6,8 +6,10 @@ import argparse
 from pprint import pprint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from logintype import LoginType
 import time
 
@@ -32,11 +34,12 @@ class NanacoAutoFiller:
 
     def __init_driver(self):
         '''Chrome起動時のオプションの設定をしてドライバを返す'''
-        options = webdriver.ChromeOptions()
         if self.__is_docker:
-            options.binary_location = '/usr/bin/chromium-browser'
-            options.add_argument('--headless')
-            return webdriver.Chrome(options=options)
+            options = webdriver.firefox.options.Options()
+            options.headless = True
+            return webdriver.Firefox(options=options)
+
+        options = webdriver.ChromeOptions()
         if self.__use_canary:
             options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
         else:
@@ -53,16 +56,16 @@ class NanacoAutoFiller:
         # コードを入力する
         for i in range(SPLIT_LENGTH):
             ID = 'gift0' + str(i+1) # gift01 to gift04
-            self.__driver.find_element_by_id(ID).send_keys(SPLITED_CODES[i])
+            WebDriverWait(self.__driver, 3).until(EC.presence_of_element_located((By.ID, ID))).send_keys(SPLITED_CODES[i])
 
     def __login(self):
         '''nanacoのサイトにログインする'''
         if self.__login_type is LoginType.NET:
-            EMAIL = self.__driver.find_element_by_css_selector('#loginByPassword input[type=text]')
-            PASSWORD = self.__driver.find_element_by_css_selector('#loginByPassword input[type=password]')
+            EMAIL = WebDriverWait(self.__driver, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#loginByPassword input[type=text]')))
+            PASSWORD = WebDriverWait(self.__driver, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#loginByPassword input[type=password]')))
         elif self.__login_type is LoginType.CARD:
-            EMAIL = self.__driver.find_element_by_css_selector('#loginByCard input[name=XCID]')
-            PASSWORD = self.__driver.find_element_by_css_selector('#loginByCard input[name=SECURITY_CD]')
+            EMAIL = WebDriverWait(self.__driver, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#loginByCard input[name=XCID]')))
+            PASSWORD = WebDriverWait(self.__driver, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#loginByCard input[name=SECURITY_CD]')))
 
         EMAIL.send_keys(self.__CREDENTIALS[0])
         PASSWORD.send_keys(self.__CREDENTIALS[1])
@@ -74,9 +77,9 @@ class NanacoAutoFiller:
     def __register(self):
         '''登録するボタンを押す'''
         try:
-            self.__driver.find_element_by_css_selector('#nav2Next input[type=image]').click()
+            WebDriverWait(self.__driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#nav2Next input[type=image]'))).click()
             return True
-        except NoSuchElementException:
+        except TimeoutException:
             return False
 
     def __go_to_login_page(self):
@@ -88,11 +91,11 @@ class NanacoAutoFiller:
 
     def __go_to_agreement_page(self):
         '''ギフト登録約款ページへアクセス'''
-        self.__driver.find_element_by_css_selector('#memberNavi02').click()
+        WebDriverWait(self.__driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#memberNavi02'))).click()
 
     def __go_to_register_page(self):
         '''ギフトコード入力ページへアクセス'''
-        self.__driver.find_element_by_css_selector('#register input[type=image]').click()
+        WebDriverWait(self.__driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#register input[type=image]'))).click()
 
     def __get_register_page_handle(self):
         '''ギフトコード入力ページ（別ウィンドウ）のハンドラを取得する'''
@@ -104,7 +107,7 @@ class NanacoAutoFiller:
         '''ギフトID内容登録確認ページへアクセス
         http://qiita.com/QUANON/items/285ad7157619b0da5c67
         '''
-        self.__driver.find_element_by_id('submit-button').click()
+        WebDriverWait(self.__driver, 3).until(EC.element_to_be_clickable((By.ID, 'submit-button'))).click()
 
     def main(self):
         self.__go_to_login_page()
