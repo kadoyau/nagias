@@ -1,7 +1,7 @@
 """
 複数行のnanacoギフトカードの登録を自動化する
 """
-import sys
+import os
 import argparse
 from pprint import pprint
 from selenium import webdriver
@@ -16,11 +16,12 @@ import time
 class NanacoAutoFiller:
     __results = {'success':[], 'fairule':[]}
 
-    def __init__(self, login_type, use_canary, is_quiet, is_docker):
+    def __init__(self, login_type, use_canary, is_quiet, is_docker, is_ubuntu):
         self.__use_canary = use_canary
         self.__login_type = login_type
         self.__is_quiet = is_quiet
         self.__is_docker = is_docker
+        self.__is_ubuntu = is_ubuntu
 
         self.__driver = self.__init_driver()
         # タイムアウトまでのデフォルト秒数を指定する
@@ -38,7 +39,9 @@ class NanacoAutoFiller:
             options = webdriver.firefox.options.Options()
             options.headless = True
             return webdriver.Firefox(options=options)
-
+        if self.__is_ubuntu:
+            options = webdriver.firefox.options.Options()
+            return webdriver.Firefox(options=options)
         options = webdriver.ChromeOptions()
         if self.__use_canary:
             options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
@@ -139,6 +142,10 @@ class NanacoAutoFiller:
             time.sleep(1)
         self.__driver.quit()
 
+        # Delete geckodriver's log when using Firefox
+        if self.__is_docker or self.__is_ubuntu:
+            os.remove('geckodriver.log')
+
     def output(self):
         """結果を表示する"""
         print('SUCCESS: ' + str(len(self.__results["success"])))
@@ -169,8 +176,13 @@ if __name__ == '__main__':
        help="Option used for dockerized nagias",
        action="store_true"
     )
+    parser.add_argument(
+        "-u", "--ubuntu",
+       help="Run nagias on a Ubuntu machine with Firefox",
+       action="store_true"
+    )
     args = parser.parse_args()
 
-    nanaco = NanacoAutoFiller(LoginType(args.login_type), args.use_canary, args.quiet, args.docker)
+    nanaco = NanacoAutoFiller(LoginType(args.login_type), args.use_canary, args.quiet, args.docker, args.ubuntu)
     nanaco.main()
     nanaco.output()
