@@ -5,6 +5,7 @@
 - [Ubuntuでの実行](#ubuntuでの実行)
 - [設定ファイルの作り方](#設定ファイルの作り方)
 - [`.giftcodes`を作成しやすくする補助ツール](#giftcodesを作成しやすくする補助ツール)
+- [よくある質問](#よくある質問)
 
 # Dockerを使った実行 (recommended)
 ## 動作環境
@@ -185,5 +186,5 @@ bcdefghijklmnopq
 3. ギフトコードが送られてくるページへアクセスするとコピペ用のテキストエリアにコードが出現
 4. `.giftcodes`にペーストする
 
-## よくある質問
+# よくある質問
 https://scrapbox.io/kadoyau/nagias_FAQ
