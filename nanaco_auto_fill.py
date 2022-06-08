@@ -24,8 +24,6 @@ class NanacoAutoFiller:
         self.__is_ubuntu = is_ubuntu
 
         self.__driver = self.__init_driver()
-        # タイムアウトまでのデフォルト秒数を指定する
-        self.__driver.implicitly_wait(3)
         # ログインに必要な情報を読み込む
         with open('.secret') as f:
             self.__CREDENTIALS = f.read().strip().split('\t')
@@ -80,7 +78,7 @@ class NanacoAutoFiller:
     def __register(self):
         '''登録するボタンを押す'''
         try:
-            WebDriverWait(self.__driver, 3).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#nav2Next input[type=image]'))).click()
+            WebDriverWait(self.__driver, 2).until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#nav2Next input[type=image]'))).click()
             return True
         except TimeoutException:
             return False
