@@ -49,35 +49,25 @@ docker build -t nagias .
 モバイル会員・ネット会員
 ```
 docker run --rm --name nagias \
-           -v $PWD/.secret:/home/nagias/.secret \
-           -v $PWD/.giftcodes:/home/nagias/.giftcodes \
-           --security-opt seccomp=$PWD/chrome.json \
+           -v $PWD:/root/nagias \
            nagias python nanaco_auto_fill.py -d
 ```
 
 カード会員
 ```
 docker run --rm --name nagias \
-           -v $PWD/.secret:/home/nagias/.secret \
-           -v $PWD/.giftcodes:/home/nagias/.giftcodes \
-           --security-opt seccomp=$PWD/chrome.json \
+           -v $PWD:/root/nagias \
            nagias python nanaco_auto_fill.py -t 2 -d
 ```
 
-## 参考：Dockerのセキュリティ
-- [Seccomp security profilesのDocker公式解説](https://docs.docker.com/engine/security/seccomp/)
-- [Chrome Headlessを安全に使うために](https://github.com/Zenika/alpine-chrome#-the-best-with-seccomp)
-
-Docker用のSeccomp Profileは[jessfraz](https://github.com/jessfraz)の[chrome.json](https://github.com/jessfraz/dotfiles/blob/master/etc/docker/seccomp/chrome.json)を使っています。
-
 ## 検証環境
-- Ubuntu 20.04.2 LTS
-  - Docker 20.10.3
-  - git 2.25.1
-- Docker Image: python:3.9.2-alpine3.13
-  - Chromium 86.0.4240.111
-  - ChromeDriver 86.0.4240.111
-  - Selenium 3.141.0
+- Ubuntu 22.04 LTS
+  - Docker 20.10.17
+  - git 2.34.1
+- Docker Image python:3.10.5-slim-bullseye
+  - Firefox 91.10.0esr
+  - geckodriver 0.31.0
+  - Selenium 4.2.0
 
 # macOSでの実行
 ## 事前準備
