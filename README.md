@@ -134,10 +134,11 @@ python nanaco_auto_fill.py -h
 Chrome 62.0.3168.0では問題ありませんでした。
 
 # Ubuntuでの実行
-
+macOSとほぼ同じなので、詳細を省く。デフォルトで入っているFirefoxを使う。
+## 事前準備
 ```
 sudo apt update
-sudo apt install python3-pip
+sudo apt install python3-pip firefox-geckodriver
 
 git clone https://github.com/kadoyau/nagias.git
 cd nagias
@@ -150,7 +151,13 @@ source env/bin/activate
 pip install selenium
 ```
 
-### 実行方法
+IDとpasswordの設定を記述・ギフトコードを入力（[設定ファイルの作り方](#設定ファイルの作り方)を参照）
+```
+$EDITOR .secret
+$EDITOR .giftcodes
+```
+
+## 実行方法
 モバイル会員・ネット会員
 ```
 python nanaco_auto_fill.py -u
