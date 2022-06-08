@@ -169,6 +169,13 @@ python nanaco_auto_fill.py -u
 python nanaco_auto_fill.py -t 2 -u
 ```
 
+## 検証環境
+- Ubuntu 22.04 LTS
+  - git 2.34.1
+  - Firefox 91.10.0esr
+  - geckodriver 0.31.0
+  - Selenium 4.2.0
+
 # 設定ファイルの作り方
 ### .secretの中身
 **タブ区切り**でID/Passをかきます
