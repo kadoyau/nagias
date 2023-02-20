@@ -1,5 +1,12 @@
 ナナコギフト入力で日曜日を溶かすのは、もうおしまいにしよう
 
+- [Dockerを使った実行 (recommended)](#dockerを使った実行-recommended)
+- [macOSでの実行](#macosでの実行)
+- [Ubuntuでの実行](#ubuntuでの実行)
+- [設定ファイルの作り方](#設定ファイルの作り方)
+- [`.giftcodes`を作成しやすくする補助ツール](#giftcodesを作成しやすくする補助ツール)
+- [よくある質問](#よくある質問)
+
 # Dockerを使った実行 (recommended)
 ## 動作環境
 - OS
@@ -31,14 +38,6 @@ IDとpasswordの設定を記述・ギフトコードを入力（[設定ファイ
 $EDITOR .secret
 $EDITOR .giftcodes
 ```
-Chrome向けのseccomp profileを用意する
-```
-// macOS/Linux
-wget https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -O chrome.json
-
-// windows
-Invoke-WebRequest -Uri https://raw.githubusercontent.com/jfrazelle/dotfiles/master/etc/docker/seccomp/chrome.json -OutFile chrome.json
-```
 
 ### 3. Dockerイメージを構築
 ```
@@ -49,35 +48,26 @@ docker build -t nagias .
 モバイル会員・ネット会員
 ```
 docker run --rm --name nagias \
-           -v $PWD/.secret:/home/nagias/.secret \
-           -v $PWD/.giftcodes:/home/nagias/.giftcodes \
-           --security-opt seccomp=$PWD/chrome.json \
+           -v $PWD:/root/nagias \
            nagias python nanaco_auto_fill.py -d
 ```
 
 カード会員
 ```
 docker run --rm --name nagias \
-           -v $PWD/.secret:/home/nagias/.secret \
-           -v $PWD/.giftcodes:/home/nagias/.giftcodes \
-           --security-opt seccomp=$PWD/chrome.json \
+           -v $PWD:/root/nagias \
            nagias python nanaco_auto_fill.py -t 2 -d
 ```
 
-## 参考：Dockerのセキュリティ
-- [Seccomp security profilesのDocker公式解説](https://docs.docker.com/engine/security/seccomp/)
-- [Chrome Headlessを安全に使うために](https://github.com/Zenika/alpine-chrome#-the-best-with-seccomp)
-
-Docker用のSeccomp Profileは[jessfraz](https://github.com/jessfraz)の[chrome.json](https://github.com/jessfraz/dotfiles/blob/master/etc/docker/seccomp/chrome.json)を使っています。
-
 ## 検証環境
-- Ubuntu 20.04.2 LTS
-  - Docker 20.10.3
-  - git 2.25.1
-- Docker Image: python:3.9.2-alpine3.13
-  - Chromium 86.0.4240.111
-  - ChromeDriver 86.0.4240.111
-  - Selenium 3.141.0
+- Ubuntu 22.04 LTS
+  - Docker 20.10.17
+  - git 2.34.1
+- Docker Image `python:3.10.5-slim-bullseye`
+  - Mozilla Firefox 91.10.0esr
+  - geckodriver 0.31.0
+  - pip 22.0.4
+  - Selenium 4.2.0
 
 # macOSでの実行
 ## 事前準備
@@ -144,6 +134,50 @@ python nanaco_auto_fill.py -h
 
 Chrome 62.0.3168.0では問題ありませんでした。
 
+# Ubuntuでの実行
+macOSとほぼ同じなので詳細を省く。
+## 事前準備
+```
+sudo apt update
+sudo apt install python3-pip firefox-geckodriver
+
+git clone https://github.com/kadoyau/nagias.git
+cd nagias
+
+pip install virtualenv
+
+virtualenv env
+source env/bin/activate
+
+pip install selenium
+```
+
+IDとpasswordの設定を記述・ギフトコードを入力（[設定ファイルの作り方](#設定ファイルの作り方)を参照）
+```
+$EDITOR .secret
+$EDITOR .giftcodes
+```
+
+## 実行方法
+モバイル会員・ネット会員
+```
+python nanaco_auto_fill.py -u
+```
+
+カード会員
+
+```
+python nanaco_auto_fill.py -t 2 -u
+```
+
+## 検証環境
+- Ubuntu 22.04 LTS
+  - git 2.34.1
+  - Mozilla Firefox 101.0
+  - geckodriver 0.31.0
+  - Python 3.10.5
+    - pip 22.0.4
+    - Selenium 4.2.0
 
 # 設定ファイルの作り方
 ### .secretの中身
@@ -169,5 +203,5 @@ bcdefghijklmnopq
 3. ギフトコードが送られてくるページへアクセスするとコピペ用のテキストエリアにコードが出現
 4. `.giftcodes`にペーストする
 
-## よくある質問
+# よくある質問
 https://scrapbox.io/kadoyau/nagias_FAQ

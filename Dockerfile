@@ -1,28 +1,31 @@
 # Official Python Docker image
 # https://hub.docker.com/_/python
-FROM python:3-alpine
+FROM python:3-slim
+
 LABEL maintainer="Yichi Zhang <ichicho@keio.jp>"
 
-# Non-root user name
-ARG user=nagias
+WORKDIR /root
 
-# Install Chromium, ChromeDriver, Selenium
-RUN apk add --no-cache \
-            curl \
-            chromium \
-            chromium-chromedriver && \
-    pip install --no-cache-dir selenium
+# Basic packages and Firefox
+RUN apt update && \
+    apt install -y --no-install-recommends \
+                curl \
+                tar \
+		firefox-esr && \
+    rm -rf /var/lib/apt/lists/*
 
-# Add non-root user
-ARG home=/home/$user
-RUN addgroup -S $user && \
-    adduser -S $user -G $user
-USER $user
-WORKDIR $home
+# Install geckodriver
+# https://selenium-python.readthedocs.io/installation.html#drivers
+# https://github.com/mozilla/geckodriver/releases
+RUN curl -OL https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz && \
+    tar -xvzf geckodriver* && \
+    mv geckodriver /usr/local/bin && \
+    rm geckodriver*
 
-# Copy necessary project files
-COPY nanaco_auto_fill.py $home
-COPY logintype.py $home
+# Install Selenium
+RUN pip install --no-cache-dir selenium==4.2.0
+
+WORKDIR /root/nagias
 
 # Default usage: override CMD in *docker run* for proper logintype
 CMD ["echo", "Nothing happened. To use nagias, please follow the steps described in README.md."]
